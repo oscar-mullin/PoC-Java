@@ -25,6 +25,7 @@ public class LoginPage extends PageObject {
 		return usernameField.isDisplayed();
 	}
 	 
+//In the future this method should return another PageObject. The Home Page or the Error Page for example
 	public void login(String username, String password){ 
 //We could have use fillInCredentials and clickSubmit Methods to avoid repetition of code
 	 	this.usernameField.clear(); 
