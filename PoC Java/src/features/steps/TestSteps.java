@@ -14,16 +14,21 @@ public class TestSteps {
 		DriverManager.initialize();
 	}
 	
+//Navigate to a URL is not what we would want to do from a functional perspective. We want to get Home or New Idea or x page
+//DriverManager.getDriver().navigate().to() should be part of DriverManager and not in the test
    	@Given("^I navigate to (.*) url$")
 	public void navigateUrl(String url) {
    		DriverManager.getDriver().navigate().to(url);
    	}
 	
+//This is correct. However, try to think what would happen if you want to test that it uses a  wrong password. Would this be enough?
   	@Then("^I login to the site using (.*) username and (.*) password credentials$")
 	public void login(String username, String password) {
   		LoginPage loginPage = new LoginPage(DriverManager.getDriver());
-  		assertTrue(loginPage.isInitialized());
+  		//This assert should not be here. The verification should be done at the Page Object  level
+                assertTrue(loginPage.isInitialized());
   		loginPage.login(username, password);
+		//What is the final assertion after calling login?
    	}   
    
 	@After
