@@ -4,7 +4,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.By; 
-import static org.junit.Assert.*;
+import org.testng.Assert;
+
+/*
+ * 1/27/2017 - Walter
+ *      - Updated assertions to testNG Asserts
+ */
 
 public class LoginPage extends PageObject {
 
@@ -47,7 +52,7 @@ public class LoginPage extends PageObject {
 	 
 	//In the future this method should return another PageObject. The Home Page or the Error Page for example
 	public boolean login(String username, String password){	
-		assertTrue(elementIsDisplayed(usernameField));		
+		Assert.assertTrue(elementIsDisplayed(usernameField));		
 		//We could have use fillInCredentials and clickSubmit Methods to avoid repetition of code
 		//Margot: changed to use generic methods instead
 		fillValue(this.usernameField, username);

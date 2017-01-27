@@ -3,20 +3,23 @@ package features.steps;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
-import static org.junit.Assert.*;
 
-import org.openqa.selenium.By;
+import org.testng.Assert;
 
 import features.pages.*;
 
+/*
+ * 1/27/2017 - Walter
+ *     - Updated assertions to testNG Asserts
+ *     - Moved Driver Initializer to Runner Classes
+ */
 public class TestSteps {
 
 	LoginPage loginPage = null;
 	
 	@Before
 	public void initializeDriver(){
-		DriverManager.initialize();
-		loginPage = new LoginPage(DriverManager.getDriver());		
+		loginPage = new LoginPage(DriverManager.getDriver());
 	}
 	
 	//Navigate to a URL is not what we would want to do from a functional perspective. We want to get Home or New Idea or x page	
@@ -30,7 +33,7 @@ public class TestSteps {
 	public void login(String username, String password) {  		
   		//This assert should not be here. The verification should be done at the Page Object  level
   		//Margot: moved assert to method               
-  		assertTrue(loginPage.login(username, password));
+  		Assert.assertTrue(loginPage.login(username, password));
 		//What is the final assertion after calling login?
 		//Margot: login method now returns a boolean to verify the login was successful 
    	}   
@@ -51,10 +54,10 @@ public class TestSteps {
 	public void verifyPage(String page) {  		     
   		switch (page) {
         	case "Forgot Username":
-        		assertTrue(loginPage.elementIsDisplayed(loginPage.getElement("Forgot Username Title")));        		
+        		Assert.assertTrue(loginPage.elementIsDisplayed(loginPage.getElement("Forgot Username Title")));        		
         		break;
         	case "Sign In":
-        		assertTrue(loginPage.elementIsDisplayed(loginPage.getElement("Sign In Title")));        		
+        		Assert.assertTrue(loginPage.elementIsDisplayed(loginPage.getElement("Sign In Title")));        		
         		break;
         	default:
             	throw new IllegalArgumentException("'"+page+"' is not listed!");
@@ -87,7 +90,7 @@ public class TestSteps {
 	public void verifyTextInPage(String message, String page) {  		     
   		switch (page) {
         	case "Forgot Username":
-        		assertTrue("Text not found!", loginPage.messageIsDisplayed(message));
+        		Assert.assertTrue(loginPage.messageIsDisplayed(message), "Text not found!");
         		break;        	
         	default:
             	throw new IllegalArgumentException("'"+page+"' is not listed!");
