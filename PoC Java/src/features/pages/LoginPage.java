@@ -3,6 +3,8 @@ package features.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.By; 
+import static org.junit.Assert.*;
 
 public class LoginPage extends PageObject {
 
@@ -15,42 +17,129 @@ public class LoginPage extends PageObject {
 	@FindBy(css="button[type=submit]") 
 	private WebElement submitButton; 
 	 
+	@FindBy(xpath=".//a[@href='#/login/forgot/username']") 
+	private WebElement forgotUsernameLink;
+	
+	@FindBy(xpath=".//h2[text()='Forgot Username']") 
+	private WebElement forgotUsernameTitle;
+	
+	@FindBy(xpath=".//h2[text()='Sign In']") 
+	private WebElement signInTitle;        
+			
+	@FindBy(xpath=".//button[text()='CANCEL']") 
+	private WebElement cancelButton;
+	
+	@FindBy(xpath=".//a[@ui-sref='app.login.signin']") 
+	private WebElement returnSignInLink;	
+	
+	@FindBy(xpath=".//div[contains(@class,'request-sent-container')]") 
+	private WebElement forgotUsernameSuccessContainer;	
+		
 	public LoginPage(WebDriver driver) { 
 		super(driver); 
 	} 
 	 
-	public boolean isInitialized() {	
-//This should not be here. Find a way to use the parent constructor so it is
-//reusable
-		return usernameField.isDisplayed();
+//Margot: removed method
+//	public boolean isInitialized() {	
+//		//This should not be here. Find a way to use the parent constructor so it is reusable
+//		return usernameField.isDisplayed();
+//	}
+	 
+	//In the future this method should return another PageObject. The Home Page or the Error Page for example
+	public boolean login(String username, String password){	
+		assertTrue(elementIsDisplayed(usernameField));		
+		//We could have use fillInCredentials and clickSubmit Methods to avoid repetition of code
+		//Margot: changed to use generic methods instead
+		fillValue(this.usernameField, username);
+		fillValue(this.passwordField, password);	 	
+	 	clickElement(this.submitButton);	 	
+	 	return driver.findElement(By.cssSelector(".wysiwyg>h1")).isDisplayed();
+	 } 
+
+	public WebElement getElement(String element){ 
+		switch (element) {
+			case "Username": 				
+				return usernameField;				
+			case "Password": 				
+			 	return passwordField;				
+ 			case "Forgot Username Email":
+ 				return usernameField; 			
+	 		case "Forgot Username Title":
+	 			return forgotUsernameTitle;     			
+	 		case "Sign In Title":
+	 			return signInTitle;
+	 		case "Forgot your username?":
+				return forgotUsernameLink;				
+			case "Return to sign in":
+				return returnSignInLink;
+			case "Submit":
+				return submitButton;				
+			case "Cancel":
+				return cancelButton;								
+	 		default:
+	     		throw new IllegalArgumentException("'"+element+"' is not listed!");
+		} 
 	}
+
+
+//	public void fillValue(String field, String value){ 
+//		switch (field) {
+//			case "Username": 				
+// 				this.usernameField.clear(); 
+// 			 	this.usernameField.sendKeys(value);
+// 				break;
+//			case "Password": 				
+// 			 	this.passwordField.clear(); 
+// 			 	this.passwordField.sendKeys(value);
+// 				break;
+//	 		case "Forgot Username Email":
+//	 			this.usernameField.sendKeys(value);
+//	 			break;
+//	 		default:
+//	     		throw new IllegalArgumentException("'"+field+"' is not listed!");
+//		}  
+//	} 
+			 
+//	public void clickButton(String button){ 
+//		switch (button) {
+//			case "Submit":
+//				this.submitButton.click();
+//				break;
+//			case "Cancel":
+//				this.cancelButton.click();
+//				break;
+//			default:
+//	  			throw new IllegalArgumentException("'"+button+"' is not listed!");
+//			}   
+//	 }
 	 
-//In the future this method should return another PageObject. The Home Page or the Error Page for example
-	public void login(String username, String password){ 
-//We could have use fillInCredentials and clickSubmit Methods to avoid repetition of code
-	 	this.usernameField.clear(); 
-	 	this.usernameField.sendKeys(username); 
-	 	this.passwordField.clear(); 
-	 	this.passwordField.sendKeys(password);
-//Try using WebDriverWaits instead of hardcoded waits. This will wait always
-	 	try {
-			new Thread().sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-//If we use 'this' in other places, let's try to use it consistently
-	 	submitButton.click(); 
-	 } 
+//	public void clickLink(String link){		 
+//		switch (link) {			
+//			case "Forgot your username?":
+//				this.forgotUsernameLink.click();
+//				break;
+//			case "Return to sign in":
+//				this.returnSignInLink.click();
+//				break;
+//			default:
+//	  			throw new IllegalArgumentException("'"+link+"' is not listed!");
+//		} 
+//	}
+	 	 
+//	public boolean elementDisplayed(String element){ 
+//		switch (element) {
+//	 		case "Forgot Username Title":
+//	 			return forgotUsernameTitle.isDisplayed();     			
+//	 		case "Sign In Title":
+//	 			return signInTitle.isDisplayed();
+//	 		default:
+//	     		throw new IllegalArgumentException("'"+element+"' is not listed!");
+//		} 
+//	 }	
 	 
-	 public void fillInCredentials(String username, String password){ 
-	 	this.usernameField.clear(); 
-	 	this.usernameField.sendKeys(username); 
-	 	this.passwordField.clear(); 
-	 	this.passwordField.sendKeys(password); 
-	 } 
-	 
-	 public void clickSubmitButton(){ 
-		submitButton.click(); 
-	 }	
+	public boolean messageIsDisplayed(String message){ 
+		String containerText = this.forgotUsernameSuccessContainer.getText();
+		return containerText.contains(message);
+	}
 	
 }
