@@ -48,6 +48,11 @@ public class DriverManager {
         }
 	}
 		
+
+	public static void goToUrl(String url){
+		driver.navigate().to(url);
+	}	
+	
 	public static void cleanUp(){
 		driver.manage().deleteAllCookies();
 	}
