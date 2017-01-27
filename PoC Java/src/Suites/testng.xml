@@ -2,17 +2,17 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="PoC Tests" parallel="tests" thread-count="2">
 
-  <test name="PoC Tests Success">
+  <test name="PoC Tests One">
     <parameter name="browser" value="firefox" />
     <classes>
       <class name="runners.TestOneRunner"/>
     </classes>
   </test>
   
-  <test name="PoC Tests Failed">
+  <test name="PoC Tests Two">
     <parameter name="browser" value="firefox" />
     <classes>
-      <class name="runners.TestTwoRunner"/>
+      <class name="runners.TestTwoRunner"></class>
     </classes>
   </test>
 </suite>
