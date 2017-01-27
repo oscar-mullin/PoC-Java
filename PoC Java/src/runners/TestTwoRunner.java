@@ -13,7 +13,7 @@ import features.pages.DriverManager;
  *     - Included initialization of Driver on Runner because the Variable is being sent from testng.xml
  */
 @CucumberOptions(
-		features = "src/features/FailedTest.feature",		
+		features = "src/features/TestTwo.feature",		
 		glue = "features.steps",
 		dryRun = false
 		)
