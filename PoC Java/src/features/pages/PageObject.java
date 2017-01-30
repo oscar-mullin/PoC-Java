@@ -11,17 +11,5 @@ public class PageObject {
 		this.driver = driver; 
 		PageFactory.initElements(driver, this); 
 	}
-	
-	public boolean elementIsDisplayed(WebElement element) {		
-		return element.isDisplayed();
-	}
-	
-	public void clickElement(WebElement element){		
-		element.click();		
-	}
-	
-	public void fillValue(WebElement element, String value){		
-		element.clear(); 
-		element.sendKeys(value);		
-	}
+
 }

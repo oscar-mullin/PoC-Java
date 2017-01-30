@@ -1,5 +1,6 @@
 package features.steps;
 
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
@@ -16,10 +17,12 @@ import features.pages.*;
 public class TestSteps {
 
 	LoginPage loginPage = null;
+	public Scenario scenario;
 	
 	@Before
-	public void initializeDriver(){
-		loginPage = new LoginPage(DriverManager.getDriver());
+	public void initializeDriver(Scenario scenario){
+		loginPage = new LoginPage(DriverManager.getDriver());		
+		this.scenario = scenario;
 	}
 	
 	//Navigate to a URL is not what we would want to do from a functional perspective. We want to get Home or New Idea or x page	
@@ -43,7 +46,7 @@ public class TestSteps {
   		switch (page) {
 	    	case "Login":
 	    	case "Forgot Username":
-	    		loginPage.clickElement(loginPage.getElement(link));        		
+	    		loginPage.clickElement(link);        		
 	    		break;	    	
 	    	default:
 	        	throw new IllegalArgumentException("'"+page+"' is not listed!");
@@ -54,10 +57,10 @@ public class TestSteps {
 	public void verifyPage(String page) {  		     
   		switch (page) {
         	case "Forgot Username":
-        		Assert.assertTrue(loginPage.elementIsDisplayed(loginPage.getElement("Forgot Username Title")));        		
+        		Assert.assertTrue(loginPage.elementIsDisplayed("Forgot Username Title"));        		
         		break;
         	case "Sign In":
-        		Assert.assertTrue(loginPage.elementIsDisplayed(loginPage.getElement("Sign In Title")));        		
+        		Assert.assertTrue(loginPage.elementIsDisplayed("Sign In Title"));        		
         		break;
         	default:
             	throw new IllegalArgumentException("'"+page+"' is not listed!");
@@ -68,7 +71,8 @@ public class TestSteps {
 	public void fillInFieldInPage(String field, String value, String page) {  		     
   		switch (page) {
         	case "Forgot Username":
-        		loginPage.fillValue(loginPage.getElement(field), value);
+        	case "Login":
+        		loginPage.fillValue(field, value);
         		break;
         	default:
             	throw new IllegalArgumentException("'"+page+"' is not listed!");
@@ -78,8 +82,9 @@ public class TestSteps {
   	@When("^I click on the \"([^\"]*)\" button in \"([^\"]*)\" page$")
 	public void clickButtonInPage(String button, String page) {  		     
   		switch (page) {
-        	case "Forgot Username":        		
-        		loginPage.clickElement(loginPage.getElement(button));
+        	case "Forgot Username":
+        	case "Login":
+        		loginPage.clickElement(button);
         		break;
         	default:
             	throw new IllegalArgumentException("'"+page+"' is not listed!");
@@ -90,11 +95,17 @@ public class TestSteps {
 	public void verifyTextInPage(String message, String page) {  		     
   		switch (page) {
         	case "Forgot Username":
-        		Assert.assertTrue(loginPage.messageIsDisplayed(message), "Text not found!");
+        	case "Login":
+        		Assert.assertTrue(loginPage.messageIsDisplayed(page, message), "Text not found!");
         		break;        	
         	default:
             	throw new IllegalArgumentException("'"+page+"' is not listed!");
   		} 
+   	}
+   	
+  	@When("^I make a Forgot Username request with \"([^\"]*)\" email$")
+	public void forgotUsernameRequest(String email) {
+  		loginPage.forgotUsernameRequest(email);        
    	}
    	
 	@After

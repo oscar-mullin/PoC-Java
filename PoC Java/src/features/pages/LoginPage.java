@@ -40,6 +40,9 @@ public class LoginPage extends PageObject {
 	@FindBy(xpath=".//div[contains(@class,'request-sent-container')]") 
 	private WebElement forgotUsernameSuccessContainer;	
 		
+	@FindBy(css=".alert-danger") 
+	private WebElement erroMessageContainer;			
+	
 	public LoginPage(WebDriver driver) { 
 		super(driver); 
 	} 
@@ -52,99 +55,79 @@ public class LoginPage extends PageObject {
 	 
 	//In the future this method should return another PageObject. The Home Page or the Error Page for example
 	public boolean login(String username, String password){	
-		Assert.assertTrue(elementIsDisplayed(usernameField));		
-		//We could have use fillInCredentials and clickSubmit Methods to avoid repetition of code
-		//Margot: changed to use generic methods instead
-		fillValue(this.usernameField, username);
-		fillValue(this.passwordField, password);	 	
-	 	clickElement(this.submitButton);	 	
+		Assert.assertTrue(usernameField.isDisplayed());		
+		fillValue("Username", username);
+		fillValue("Password", password);	 	
+	 	clickElement("Submit");	 	
 	 	return driver.findElement(By.cssSelector(".wysiwyg>h1")).isDisplayed();
 	 } 
 
-	public WebElement getElement(String element){ 
-		switch (element) {
+	public void fillValue(String field, String value){ 
+		switch (field) {
 			case "Username": 				
-				return usernameField;				
+ 				this.usernameField.clear(); 
+ 			 	this.usernameField.sendKeys(value);
+ 				break;
 			case "Password": 				
-			 	return passwordField;				
- 			case "Forgot Username Email":
- 				return usernameField; 			
-	 		case "Forgot Username Title":
-	 			return forgotUsernameTitle;     			
-	 		case "Sign In Title":
-	 			return signInTitle;
-	 		case "Forgot your username?":
-				return forgotUsernameLink;				
-			case "Return to sign in":
-				return returnSignInLink;
+ 			 	this.passwordField.clear(); 
+ 			 	this.passwordField.sendKeys(value);
+ 				break;
+	 		case "Forgot Username Email":
+	 			this.usernameField.sendKeys(value);
+	 			break;
+	 		default:
+	     		throw new IllegalArgumentException("'"+field+"' is not listed!");
+		}  
+	} 
+			 
+	public void clickElement(String element){ 
+		switch (element) {
 			case "Submit":
-				return submitButton;				
+				this.submitButton.click();
+				break;
 			case "Cancel":
-				return cancelButton;								
+				this.cancelButton.click();
+				break;
+			case "Forgot your username?":
+				this.forgotUsernameLink.click();
+				break;
+			case "Return to sign in":
+				this.returnSignInLink.click();
+				break;
+			default:
+	  			throw new IllegalArgumentException("'"+element+"' is not listed!");
+			}   
+	 }	 
+	 	 
+	public boolean elementIsDisplayed(String element){ 
+		switch (element) {
+	 		case "Forgot Username Title":
+	 			return this.forgotUsernameTitle.isDisplayed();     			
+	 		case "Sign In Title":
+	 			return this.signInTitle.isDisplayed();
 	 		default:
 	     		throw new IllegalArgumentException("'"+element+"' is not listed!");
 		} 
+	 }	
+	 
+	public boolean messageIsDisplayed(String section, String message){
+		String containerText = "";	
+ 		switch (section) {
+	    	case "Forgot Username":
+	    		containerText = this.forgotUsernameSuccessContainer.getText();
+	    		return containerText.contains(message);    		        	
+	    	case "Login":
+	    		containerText = this.erroMessageContainer.getText();
+	    		return containerText.contains(message);
+	    	default:
+	        	throw new IllegalArgumentException("'"+section+"' is not listed!");
+		} 
 	}
 
-
-//	public void fillValue(String field, String value){ 
-//		switch (field) {
-//			case "Username": 				
-// 				this.usernameField.clear(); 
-// 			 	this.usernameField.sendKeys(value);
-// 				break;
-//			case "Password": 				
-// 			 	this.passwordField.clear(); 
-// 			 	this.passwordField.sendKeys(value);
-// 				break;
-//	 		case "Forgot Username Email":
-//	 			this.usernameField.sendKeys(value);
-//	 			break;
-//	 		default:
-//	     		throw new IllegalArgumentException("'"+field+"' is not listed!");
-//		}  
-//	} 
-			 
-//	public void clickButton(String button){ 
-//		switch (button) {
-//			case "Submit":
-//				this.submitButton.click();
-//				break;
-//			case "Cancel":
-//				this.cancelButton.click();
-//				break;
-//			default:
-//	  			throw new IllegalArgumentException("'"+button+"' is not listed!");
-//			}   
-//	 }
-	 
-//	public void clickLink(String link){		 
-//		switch (link) {			
-//			case "Forgot your username?":
-//				this.forgotUsernameLink.click();
-//				break;
-//			case "Return to sign in":
-//				this.returnSignInLink.click();
-//				break;
-//			default:
-//	  			throw new IllegalArgumentException("'"+link+"' is not listed!");
-//		} 
-//	}
-	 	 
-//	public boolean elementDisplayed(String element){ 
-//		switch (element) {
-//	 		case "Forgot Username Title":
-//	 			return forgotUsernameTitle.isDisplayed();     			
-//	 		case "Sign In Title":
-//	 			return signInTitle.isDisplayed();
-//	 		default:
-//	     		throw new IllegalArgumentException("'"+element+"' is not listed!");
-//		} 
-//	 }	
-	 
-	public boolean messageIsDisplayed(String message){ 
-		String containerText = this.forgotUsernameSuccessContainer.getText();
-		return containerText.contains(message);
+	public void forgotUsernameRequest(String email) {
+		this.forgotUsernameLink.click();
+		this.usernameField.sendKeys(email);
+		this.submitButton.click();		 
 	}
 	
 }

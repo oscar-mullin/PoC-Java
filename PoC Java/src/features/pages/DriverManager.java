@@ -45,7 +45,7 @@ public class DriverManager {
     	capability.setPlatform(Platform.ANY);
     	try {
 //The URL of the grid should be in a config file as well
-			driver = new RemoteWebDriver(new URL("http://192.168.121.38:5566/wd/hub"),capability);
+			driver = new RemoteWebDriver(new URL("http://192.168.121.34:5566/wd/hub"),capability);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
