@@ -20,7 +20,7 @@ public class TestSteps {
 	public Scenario scenario;
 	
 	@Before
-	public void initializeDriver(Scenario scenario){
+	public void initializePage(Scenario scenario){
 		loginPage = new LoginPage(DriverManager.getDriver());		
 		this.scenario = scenario;
 	}
@@ -108,9 +108,9 @@ public class TestSteps {
   		loginPage.forgotUsernameRequest(email);        
    	}
    	
-	@After
-	public void closeDriver(){		
-		DriverManager.cleanUp();
-		//DriverManager.tearDown();
-	}
+//	@After
+//	public void closeDriver(){		
+//		DriverManager.cleanUp();
+//		//DriverManager.tearDown();
+//	}
 }

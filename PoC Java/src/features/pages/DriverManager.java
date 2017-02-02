@@ -15,14 +15,17 @@ import org.openqa.selenium.remote.RemoteWebDriver;
  *      TODO: Add support for config File 
  */
 public class DriverManager {
-	protected static WebDriver driver;
 	
-	public static WebDriver getDriver() {
-		return driver;
+	public static ThreadLocal<RemoteWebDriver> driver = new ThreadLocal<RemoteWebDriver>();
+	
+	public static WebDriver getDriver() {		
+		return driver.get();
 	}
 
-	public static void initialize(String browser){
-//If possible, paths and stuff like that should be placed in a config file and refer them from there
+	public static void initialize(String browser){	
+		RemoteWebDriver remote_driver = null; //used with thread
+	
+		//If possible, paths and stuff like that should be placed in a config file and refer them from there
 		System.setProperty("webdriver.gecko.driver", ".\\libs\\geckodriver.exe");
     	
     	//Remote Configuration
@@ -44,26 +47,30 @@ public class DriverManager {
 
     	capability.setPlatform(Platform.ANY);
     	try {
-//The URL of the grid should be in a config file as well
-			driver = new RemoteWebDriver(new URL("http://192.168.121.34:5566/wd/hub"),capability);
+			//The URL of the grid should be in a config file as well
+    		remote_driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),capability);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 
-//Implicit wait time should be in a config file
-    	driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	}
-		
+		//Implicit wait time should be in a config file
+    	remote_driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    	setWebDriver(remote_driver);    	
+	}		
 
-	public static void goToUrl(String url){
-		driver.navigate().to(url);
+	public static void setWebDriver(RemoteWebDriver remote_driver) {
+        driver.set(remote_driver);
+    }
+
+	public static void goToUrl(String url){		
+		getDriver().navigate().to(url);
 	}	
 	
-	public static void cleanUp(){
-		driver.manage().deleteAllCookies();
+	public static void cleanUp(){	
+		getDriver().manage().deleteAllCookies();
 	}
 		
-	public static void tearDown(){
-		driver.quit();
+	public static void tearDown(){		
+		getDriver().quit();			        
 	}
 }
