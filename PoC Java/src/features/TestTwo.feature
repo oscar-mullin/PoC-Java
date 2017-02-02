@@ -6,9 +6,7 @@ Feature: Test Two
 #	Examples:
 #		| site																														| username	| password		|		
 #		| https://automaincommunity.qa392automation.spigit.com/User/Login	| autobot5	| Spigit.123	|
-		
-		
-		
+			
   Scenario Outline: Verify that the username is validated
     Given I access "<site>" site    
     And I fill in "Username" field with "<wrong_username>" value on "Login" page
