@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="PoC Tests" parallel="tests" thread-count="2">
+<suite name="PoC Tests" parallel="tests" thread-count="1">
 
 	<test name="PoC Tests One">
-    	<parameter name="browser" value="firefox" />
+    	<parameter name="browser" value="chrome" />
     	<classes>
       		<class name="runners.TestOneRunner"/>
     	</classes>
   	</test>
   	
   	<test name="PoC Tests Two">
-    	<parameter name="browser" value="firefox" />
+    	<parameter name="browser" value="chrome" />
     	<classes>
       		<class name="runners.TestTwoRunner"></class>
     	</classes>
